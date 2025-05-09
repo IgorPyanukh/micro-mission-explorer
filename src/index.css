@@ -1,3 +1,4 @@
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -13,10 +14,10 @@
     --popover: 0 0% 100%;
     --popover-foreground: 222.2 84% 4.9%;
 
-    --primary: 222.2 47.4% 11.2%;
+    --primary: 199 84% 49%;
     --primary-foreground: 210 40% 98%;
 
-    --secondary: 210 40% 96.1%;
+    --secondary: 25 95% 53%;
     --secondary-foreground: 222.2 47.4% 11.2%;
 
     --muted: 210 40% 96.1%;
@@ -32,22 +33,15 @@
     --input: 214.3 31.8% 91.4%;
     --ring: 222.2 84% 4.9%;
 
-    --radius: 0.5rem;
+    --radius: 0.75rem;
 
     --sidebar-background: 0 0% 98%;
-
     --sidebar-foreground: 240 5.3% 26.1%;
-
     --sidebar-primary: 240 5.9% 10%;
-
     --sidebar-primary-foreground: 0 0% 98%;
-
     --sidebar-accent: 240 4.8% 95.9%;
-
     --sidebar-accent-foreground: 240 5.9% 10%;
-
     --sidebar-border: 220 13% 91%;
-
     --sidebar-ring: 217.2 91.2% 59.8%;
   }
 
@@ -97,5 +91,51 @@
 
   body {
     @apply bg-background text-foreground;
+  }
+}
+
+@layer components {
+  .mission-card {
+    @apply relative flex flex-col justify-between p-4 bg-white rounded-xl border border-gray-200 shadow-sm hover:shadow-md transition-all duration-300;
+  }
+
+  .mission-badge {
+    @apply absolute top-2 right-2 px-2 py-1 text-xs rounded-full font-medium;
+  }
+
+  .badge-icon {
+    @apply w-14 h-14 flex items-center justify-center rounded-full shadow-md;
+  }
+  
+  .progress-bar {
+    @apply h-2 rounded-full bg-gray-200 overflow-hidden;
+  }
+  
+  .progress-value {
+    @apply h-full rounded-full transition-all duration-500;
+  }
+  
+  .mobile-layout {
+    @apply max-w-md w-full mx-auto h-[640px] rounded-3xl overflow-hidden border-8 border-app-navy bg-app-light-blue flex flex-col;
+  }
+  
+  .mobile-header {
+    @apply bg-app-blue text-white p-4 flex items-center justify-between;
+  }
+  
+  .mobile-content {
+    @apply flex-1 overflow-y-auto p-4;
+  }
+  
+  .mobile-nav {
+    @apply bg-white flex justify-around items-center p-2 border-t border-gray-200;
+  }
+  
+  .nav-item {
+    @apply flex flex-col items-center justify-center px-3 py-1 rounded-lg;
+  }
+  
+  .nav-item.active {
+    @apply bg-app-light-blue text-app-blue;
   }
 }
