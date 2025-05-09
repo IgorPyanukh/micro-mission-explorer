@@ -104,7 +104,8 @@ const AdminSidebar = () => {
               <Link
                 to={item.path}
                 className={`flex items-center px-3 py-2 rounded-lg ${
-                  currentPath === item.path 
+                  currentPath === item.path || 
+                  (item.path !== "/admin/dashboard" && currentPath.startsWith(item.path))
                     ? 'bg-app-light-blue text-app-blue font-medium' 
                     : 'text-gray-600 hover:bg-gray-100'
                 }`}

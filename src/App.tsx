@@ -19,6 +19,9 @@ import AdminLogin from "./pages/admin/AdminLogin";
 import AdminDashboard from "./pages/admin/AdminDashboard";
 import MissionManagement from "./pages/admin/MissionManagement";
 import StudentManagement from "./pages/admin/StudentManagement";
+import ContentManagement from "./pages/admin/ContentManagement";
+import ReportsPage from "./pages/admin/ReportsPage";
+import SettingsPage from "./pages/admin/SettingsPage";
 
 const queryClient = new QueryClient();
 
@@ -59,6 +62,9 @@ const App = () => {
               <Route path="/admin/dashboard" element={<AdminDashboard />} />
               <Route path="/admin/missions" element={<MissionManagement />} />
               <Route path="/admin/students" element={<StudentManagement />} />
+              <Route path="/admin/content" element={<ContentManagement />} />
+              <Route path="/admin/reports" element={<ReportsPage />} />
+              <Route path="/admin/settings" element={<SettingsPage />} />
 
               {/* Catch-all route */}
               <Route path="*" element={<NotFound />} />

@@ -4,26 +4,33 @@ import AdminLayout from "@/components/admin/AdminLayout";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { mockMissions, mockBadges } from "@/data/mockData";
-import { Badge } from "@/types";
+import { Badge, Mission } from "@/types";
+import CreateMissionModal from "@/components/admin/CreateMissionModal";
 
 const MissionManagement = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedMission, setSelectedMission] = useState<string | null>(null);
+  const [missions, setMissions] = useState<Mission[]>(mockMissions);
+  const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
   
   const filteredMissions = searchQuery 
-    ? mockMissions.filter(mission => 
+    ? missions.filter(mission => 
         mission.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
         mission.description.toLowerCase().includes(searchQuery.toLowerCase())
       )
-    : mockMissions;
+    : missions;
     
-  const selectedMissionData = mockMissions.find(m => m.id === selectedMission);
+  const selectedMissionData = missions.find(m => m.id === selectedMission);
   const missionBadge = selectedMissionData?.badgeId 
     ? mockBadges.find(b => b.id === selectedMissionData.badgeId) 
     : null;
     
   const getBadgeColor = (badge: Badge) => {
     return badge.color.replace('bg-', 'text-');
+  };
+  
+  const handleCreateMission = (newMission: Mission) => {
+    setMissions(prev => [...prev, newMission]);
   };
   
   return (
@@ -33,7 +40,10 @@ const MissionManagement = () => {
           <h2 className="text-2xl font-bold">Missions</h2>
           <p className="text-gray-600">Create, manage, and verify student missions</p>
         </div>
-        <Button className="bg-app-blue hover:bg-blue-700">
+        <Button 
+          className="bg-app-blue hover:bg-blue-700"
+          onClick={() => setIsCreateModalOpen(true)}
+        >
           Create New Mission
         </Button>
       </div>
@@ -240,7 +250,7 @@ const MissionManagement = () => {
               </p>
               <Button 
                 className="mt-4 bg-app-blue hover:bg-blue-700"
-                onClick={() => setSelectedMission(mockMissions[0].id)}
+                onClick={() => setSelectedMission(missions[0].id)}
               >
                 Select First Mission
               </Button>
@@ -248,6 +258,12 @@ const MissionManagement = () => {
           )}
         </div>
       </div>
+
+      <CreateMissionModal
+        isOpen={isCreateModalOpen}
+        onClose={() => setIsCreateModalOpen(false)}
+        onCreateMission={handleCreateMission}
+      />
     </AdminLayout>
   );
 };
