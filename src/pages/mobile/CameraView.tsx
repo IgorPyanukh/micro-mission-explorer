@@ -1,49 +1,53 @@
 
-import { useState, useRef, useEffect } from "react";
+import { useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import MobileLayout from "@/components/mobile/MobileLayout";
 import { Button } from "@/components/ui/button";
+import { toast } from "sonner";
 
 const CameraView = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  const { missionId } = location.state || {};
-  const [isCaptured, setIsCaptured] = useState(false);
-  const [isAnalyzing, setIsAnalyzing] = useState(false);
-  const [classification, setClassification] = useState("");
-  const imageRef = useRef<HTMLImageElement>(null);
+  const { missionId, returnTo } = location.state || {};
   
-  const handleCapture = () => {
-    // In a real app, this would trigger the device camera
-    // For prototype, we'll simulate capturing an image
-    setIsCaptured(true);
+  const [isCameraActive, setIsCameraActive] = useState(true);
+  const [capturedImage, setCapturedImage] = useState<string | null>(null);
+  
+  // In a real app, this would use the device's camera API
+  // For this prototype, we're simulating with placeholder images
+  const placeholderImages = [
+    "/placeholder.svg",
+    "https://images.unsplash.com/photo-1518495973542-4542c06a5843",
+    "https://images.unsplash.com/photo-1581091226825-a6a2a5aee158",
+    "https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5"
+  ];
+  
+  const handleCaptureImage = () => {
+    // Simulate camera capture with a random placeholder
+    const randomImage = placeholderImages[Math.floor(Math.random() * placeholderImages.length)];
+    setCapturedImage(randomImage);
+    setIsCameraActive(false);
+    toast.success("Image captured!");
   };
   
-  const handleRetry = () => {
-    setIsCaptured(false);
-    setClassification("");
+  const handleRetake = () => {
+    setCapturedImage(null);
+    setIsCameraActive(true);
   };
   
-  const handleAnalyze = () => {
-    setIsAnalyzing(true);
-    
-    // Simulate AI analysis
-    setTimeout(() => {
-      setIsAnalyzing(false);
-      setClassification("Plant Cell - Onion Epidermal");
-    }, 2000);
+  const handleConfirm = () => {
+    if (capturedImage && returnTo) {
+      // Navigate back to mission details with the captured image
+      navigate(returnTo, { state: { capturedImage } });
+    } else {
+      // Default fallback if no return path was specified
+      navigate("/mobile/missions");
+    }
   };
   
-  const handleSave = () => {
-    // In a real app, this would save the captured image and classification
-    // For prototype, we'll just navigate back with simulated data
-    if (missionId) {
-      navigate(`/mobile/mission/${missionId}`, {
-        state: {
-          capturedImage: "/placeholder.svg", // In a real app, this would be the actual image
-          classification: classification
-        }
-      });
+  const handleBack = () => {
+    if (returnTo) {
+      navigate(returnTo);
     } else {
       navigate("/mobile/missions");
     }
@@ -52,112 +56,58 @@ const CameraView = () => {
   return (
     <MobileLayout 
       title="Camera" 
-      showBackButton={true}
-      onBack={() => navigate(missionId ? `/mobile/mission/${missionId}` : "/mobile/missions")}
+      showBackButton={!isCameraActive}
+      onBack={handleBack}
       showNavigation={false}
     >
-      {/* Camera Preview */}
-      <div className="relative aspect-[3/4] bg-black rounded-lg shadow-sm overflow-hidden mb-4">
-        {isCaptured ? (
-          // Static captured image (for prototype)
-          <img 
-            ref={imageRef}
-            src="/placeholder.svg" 
-            alt="Captured microscope image" 
-            className="w-full h-full object-cover"
-          />
-        ) : (
-          // Camera view simulation
-          <div className="w-full h-full flex flex-col items-center justify-center">
-            <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-              <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/>
-              <circle cx="12" cy="13" r="4"/>
-            </svg>
-            <p className="text-white mt-4">Align your microscope with the camera</p>
-          </div>
-        )}
-        
-        {/* AI classification overlay */}
-        {classification && (
-          <div className="absolute bottom-0 left-0 right-0 bg-black bg-opacity-70 text-white p-3">
-            <div className="flex items-center">
-              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="mr-2 text-app-green">
-                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
-                <polyline points="22 4 12 14.01 9 11.01"/>
+      <div className="h-full flex flex-col">
+        {/* Camera Viewport or Captured Image Preview */}
+        <div className="flex-1 bg-black rounded-lg overflow-hidden relative mb-4">
+          {isCameraActive ? (
+            <div className="w-full h-full flex items-center justify-center">
+              <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/>
+                <circle cx="12" cy="13" r="4"/>
               </svg>
-              <div>
-                <span className="text-sm text-gray-300">AI Classification:</span>
-                <p className="font-bold">{classification}</p>
-              </div>
             </div>
-          </div>
-        )}
-      </div>
-      
-      {/* Camera Options */}
-      <div className="bg-white rounded-lg shadow-sm p-4 mb-4">
-        <div className="flex justify-between">
-          <div className="flex-1">
-            <h3 className="text-sm font-medium mb-1">Camera Mode</h3>
-            <select className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm">
-              <option>Microscope Mode</option>
-              <option>Regular Camera</option>
-              <option>Low Light</option>
-            </select>
-          </div>
-          <div className="flex-1 ml-4">
-            <h3 className="text-sm font-medium mb-1">Magnification</h3>
-            <select className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm">
-              <option>4x</option>
-              <option>10x</option>
-              <option>40x</option>
-              <option>100x</option>
-            </select>
-          </div>
+          ) : (
+            <img 
+              src={capturedImage || ""} 
+              alt="Captured" 
+              className="w-full h-full object-cover"
+            />
+          )}
         </div>
-      </div>
-      
-      {/* Action Buttons */}
-      <div className="fixed bottom-0 left-0 right-0 p-4 bg-white border-t border-gray-200">
-        {!isCaptured ? (
-          <div className="flex justify-center">
-            <Button
-              onClick={handleCapture}
-              className="w-16 h-16 rounded-full bg-app-red hover:bg-red-700"
-            >
-              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <circle cx="12" cy="12" r="10"/>
-              </svg>
-            </Button>
-          </div>
-        ) : (
-          <div className="flex space-x-3">
-            <Button
-              onClick={handleRetry}
-              variant="outline"
-              className="flex-1"
-            >
-              Retake
-            </Button>
-            
-            {!classification ? (
+        
+        {/* Camera Controls */}
+        <div className="p-4 bg-white rounded-lg">
+          {isCameraActive ? (
+            <div className="flex justify-center">
               <Button
-                onClick={handleAnalyze}
-                className="flex-1 bg-app-blue hover:bg-blue-700"
-                disabled={isAnalyzing}
+                onClick={handleCaptureImage}
+                className="w-16 h-16 rounded-full bg-app-blue hover:bg-blue-700 flex items-center justify-center"
               >
-                {isAnalyzing ? "Analyzing..." : "Analyze"}
+                <div className="w-12 h-12 rounded-full border-2 border-white"></div>
               </Button>
-            ) : (
+            </div>
+          ) : (
+            <div className="flex justify-between">
               <Button
-                onClick={handleSave}
-                className="flex-1 bg-app-green hover:bg-green-700"
+                onClick={handleRetake}
+                variant="outline"
+                className="px-8"
               >
-                Save
+                Retake
               </Button>
-            )}
-          </div>
-        )}
+              <Button
+                onClick={handleConfirm}
+                className="px-8 bg-app-green hover:bg-green-700"
+              >
+                Use Photo
+              </Button>
+            </div>
+          )}
+        </div>
       </div>
     </MobileLayout>
   );

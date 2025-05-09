@@ -1,5 +1,6 @@
-import { useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+
+import { useState, useEffect } from "react";
+import { useNavigate, useParams, useLocation } from "react-router-dom";
 import MobileLayout from "@/components/mobile/MobileLayout";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -13,6 +14,7 @@ import BadgeIcon from "@/components/mobile/BadgeIcon";
 const MissionDetails = () => {
   const { id } = useParams();
   const navigate = useNavigate();
+  const location = useLocation();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [missionStatus, setMissionStatus] = useState<"available" | "in-progress" | "completed" | "verified">("available");
   const [capturedImage, setCapturedImage] = useState<string | null>(null);
@@ -24,10 +26,18 @@ const MissionDetails = () => {
   const mission = mockMissions.find(m => m.id === id);
   const badge = mission?.badgeId ? mockBadges.find(b => b.id === mission.badgeId) : null;
   
+  // Effect to check if we're returning from the camera with an image
+  useEffect(() => {
+    if (location.state?.capturedImage) {
+      setCapturedImage(location.state.capturedImage);
+      setMissionStatus("in-progress");
+    }
+  }, [location.state]);
+  
   const handleStartMission = () => {
     // In a real app, update mission status to "in-progress"
     setMissionStatus("in-progress");
-    navigate("/mobile/camera", { state: { missionId: id } });
+    navigate("/mobile/camera", { state: { missionId: id, returnTo: `/mobile/mission/${id}` } });
   };
   
   const handleSubmitMission = () => {
@@ -130,7 +140,7 @@ const MissionDetails = () => {
           <h3 className="font-bold mb-3">Your Submission</h3>
           
           {/* Image Preview - Only shown if image is captured */}
-          {capturedImage && (
+          {capturedImage ? (
             <div className="mb-4">
               <h4 className="text-sm font-medium mb-2">Captured Image:</h4>
               <div className="rounded-lg overflow-hidden bg-gray-100 h-48 flex items-center justify-center">
@@ -144,11 +154,31 @@ const MissionDetails = () => {
                 <Button 
                   variant="outline" 
                   size="sm" 
-                  onClick={() => navigate("/mobile/camera")}
+                  onClick={() => navigate("/mobile/camera", { 
+                    state: { missionId: id, returnTo: `/mobile/mission/${id}` } 
+                  })}
                 >
                   Recapture
                 </Button>
               </div>
+            </div>
+          ) : mission.requiresImage && (
+            <div className="mb-4">
+              <Button
+                variant="outline"
+                className="w-full py-8 border-dashed border-2"
+                onClick={() => navigate("/mobile/camera", { 
+                  state: { missionId: id, returnTo: `/mobile/mission/${id}` } 
+                })}
+              >
+                <div className="flex flex-col items-center">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="mb-2">
+                    <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/>
+                    <circle cx="12" cy="13" r="4"/>
+                  </svg>
+                  <span>Take photo</span>
+                </div>
+              </Button>
             </div>
           )}
           

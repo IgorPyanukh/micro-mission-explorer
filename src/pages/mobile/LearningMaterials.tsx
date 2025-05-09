@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import MobileLayout from "@/components/mobile/MobileLayout";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
+import { toast } from "sonner";
 
 // Mock learning materials data
 const learningMaterials = [
@@ -68,6 +69,12 @@ const LearningMaterials = () => {
     setSelectedMaterial(id);
   };
   
+  const handleOpenMaterial = () => {
+    // In a real app, navigate to the specific material page
+    // For this prototype, just show a toast
+    toast.success(`Opened material: ${learningMaterials.find(m => m.id === selectedMaterial)?.title}`);
+  };
+  
   return (
     <MobileLayout 
       title="Learning Materials" 
@@ -129,7 +136,7 @@ const LearningMaterials = () => {
           <div className="fixed bottom-0 left-0 right-0 p-4 bg-white border-t border-gray-200">
             <Button 
               className="w-full bg-app-blue hover:bg-blue-700"
-              onClick={() => navigate(`/mobile/learning-material/${selectedMaterial}`)}
+              onClick={handleOpenMaterial}
             >
               Open Material
             </Button>
