@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import MobileLayout from "@/components/mobile/MobileLayout";
@@ -9,6 +8,7 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { mockMissions, mockBadges } from "@/data/mockData";
 import { Label } from "@/components/ui/label";
 import { toast } from "sonner";
+import BadgeIcon from "@/components/mobile/BadgeIcon";
 
 const MissionDetails = () => {
   const { id } = useParams();

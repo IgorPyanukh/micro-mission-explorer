@@ -22,6 +22,10 @@ export interface Mission {
   instructions: string;
   imageUrl?: string;
   badgeId?: string;
+  requiresImage?: boolean;
+  requiresText?: boolean;
+  hasMultipleChoice?: boolean;
+  requiresNumericInput?: boolean;
 }
 
 export interface Badge {
@@ -30,6 +34,7 @@ export interface Badge {
   description: string;
   imageUrl: string;
   color: string;
+  type?: "achievement" | "completion" | "excellence" | "special" | "default";
 }
 
 export interface MissionSubmission {

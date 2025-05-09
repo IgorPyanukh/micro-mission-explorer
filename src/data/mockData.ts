@@ -1,4 +1,3 @@
-
 import { User, Mission, Badge, MissionSubmission, Class } from "../types";
 
 // Mock Users
@@ -37,7 +36,9 @@ export const mockMissions: Mission[] = [
     deadline: "2024-12-31",
     instructions: "1. Prepare a slide with a thin slice of an onion\n2. Focus your microscope\n3. Take a clear photo\n4. Label the cell structures you can identify",
     imageUrl: "/placeholder.svg",
-    badgeId: "badge1"
+    badgeId: "badge1",
+    requiresImage: true,
+    requiresText: true
   },
   {
     id: "mission2",
@@ -47,7 +48,9 @@ export const mockMissions: Mission[] = [
     points: 150,
     instructions: "1. Collect a water sample from a pond\n2. Place a drop on a slide\n3. Observe under microscope\n4. Take photos of at least 3 different microorganisms",
     imageUrl: "/placeholder.svg",
-    badgeId: "badge2"
+    badgeId: "badge2",
+    requiresImage: true,
+    hasMultipleChoice: true
   },
   {
     id: "mission3",
@@ -57,7 +60,9 @@ export const mockMissions: Mission[] = [
     points: 200,
     instructions: "1. Prepare two slides: one with cheek cells and one with plant leaf cells\n2. Take clear photos of both\n3. Label cell structures\n4. Explain at least 3 differences you observed",
     imageUrl: "/placeholder.svg",
-    badgeId: "badge3"
+    badgeId: "badge3",
+    requiresImage: true,
+    requiresText: true
   },
   {
     id: "mission4",
@@ -67,7 +72,9 @@ export const mockMissions: Mission[] = [
     points: 175,
     instructions: "1. Use the prepared blood smear slide\n2. Focus on areas with well-separated cells\n3. Take photos of red and white blood cells\n4. Measure the approximate size of each type",
     imageUrl: "/placeholder.svg",
-    badgeId: "badge4"
+    badgeId: "badge4",
+    requiresImage: true,
+    requiresNumericInput: true
   }
 ];
 
@@ -78,35 +85,40 @@ export const mockBadges: Badge[] = [
     name: "Plant Explorer",
     description: "Successfully identified plant cell structures",
     imageUrl: "/placeholder.svg",
-    color: "bg-app-green"
+    color: "bg-app-green",
+    type: "achievement"
   },
   {
     id: "badge2",
     name: "Pond Detective",
     description: "Found and classified pond microorganisms",
     imageUrl: "/placeholder.svg",
-    color: "bg-app-blue"
+    color: "bg-app-blue",
+    type: "excellence"
   },
   {
     id: "badge3",
     name: "Cell Comparer",
     description: "Documented differences between cell types",
     imageUrl: "/placeholder.svg",
-    color: "bg-app-purple"
+    color: "bg-app-purple",
+    type: "completion"
   },
   {
     id: "badge4",
     name: "Blood Analyst",
     description: "Correctly identified blood cell types",
     imageUrl: "/placeholder.svg",
-    color: "bg-app-red"
+    color: "bg-app-red",
+    type: "special"
   },
   {
     id: "badge5",
     name: "First Submission",
     description: "Completed your first mission",
     imageUrl: "/placeholder.svg",
-    color: "bg-app-yellow"
+    color: "bg-app-yellow",
+    type: "completion"
   }
 ];
 
