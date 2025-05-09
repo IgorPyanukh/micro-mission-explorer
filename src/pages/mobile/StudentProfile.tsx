@@ -1,4 +1,5 @@
 
+import { useNavigate } from "react-router-dom";
 import MobileLayout from "@/components/mobile/MobileLayout";
 import { Button } from "@/components/ui/button";
 import BadgeIcon from "@/components/mobile/BadgeIcon";
@@ -6,6 +7,8 @@ import ProgressBar from "@/components/mobile/ProgressBar";
 import { mockBadges, studentProgress, leaderboardData } from "@/data/mockData";
 
 const StudentProfile = () => {
+  const navigate = useNavigate();
+  
   // Find earned badges
   const earnedBadges = mockBadges.filter(
     badge => studentProgress.badges.includes(badge.id)
@@ -115,11 +118,19 @@ const StudentProfile = () => {
       </div>
       
       {/* Actions Section */}
-      <Button variant="outline" className="w-full mb-4">
+      <Button 
+        variant="outline" 
+        className="w-full mb-4"
+        onClick={() => navigate("/mobile/learning-materials")}
+      >
         View Learning Materials
       </Button>
       
-      <Button variant="outline" className="w-full text-gray-600 mb-10">
+      <Button 
+        variant="outline" 
+        className="w-full text-gray-600 mb-10"
+        onClick={() => navigate("/mobile/settings")}
+      >
         Settings
       </Button>
     </MobileLayout>

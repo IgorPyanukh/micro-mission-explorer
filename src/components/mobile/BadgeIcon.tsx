@@ -1,5 +1,6 @@
 
 import { Badge } from "../../types";
+import { Award, Check, Star, Trophy, Zap } from "lucide-react";
 
 interface BadgeIconProps {
   badge: Badge;
@@ -13,15 +14,27 @@ const BadgeIcon: React.FC<BadgeIconProps> = ({ badge, size = "md" }) => {
     lg: "w-20 h-20"
   };
   
+  const getBadgeIcon = () => {
+    switch(badge.type) {
+      case 'achievement':
+        return <Trophy className="w-3/4 h-3/4 text-white" />;
+      case 'completion':
+        return <Check className="w-3/4 h-3/4 text-white" />;
+      case 'excellence':
+        return <Star className="w-3/4 h-3/4 text-white" />;
+      case 'special':
+        return <Zap className="w-3/4 h-3/4 text-white" />;
+      default:
+        return <Award className="w-3/4 h-3/4 text-white" />;
+    }
+  };
+  
   return (
-    <div className={`badge-icon ${badge.color} ${sizeClasses[size]}`}>
+    <div className={`badge-icon ${badge.color} ${sizeClasses[size]} rounded-full flex items-center justify-center`}>
       {badge.imageUrl ? (
         <img src={badge.imageUrl} alt={badge.name} className="w-3/4 h-3/4" />
       ) : (
-        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-          <circle cx="12" cy="8" r="7"/>
-          <polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"/>
-        </svg>
+        getBadgeIcon()
       )}
     </div>
   );

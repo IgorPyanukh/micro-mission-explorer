@@ -13,6 +13,8 @@ import MissionCenter from "./pages/mobile/MissionCenter";
 import MissionDetails from "./pages/mobile/MissionDetails";
 import CameraView from "./pages/mobile/CameraView";
 import StudentProfile from "./pages/mobile/StudentProfile";
+import LearningMaterials from "./pages/mobile/LearningMaterials";
+import Settings from "./pages/mobile/Settings";
 import AdminLogin from "./pages/admin/AdminLogin";
 import AdminDashboard from "./pages/admin/AdminDashboard";
 import MissionManagement from "./pages/admin/MissionManagement";
@@ -49,6 +51,8 @@ const App = () => {
               <Route path="/mobile/mission/:id" element={<MissionDetails />} />
               <Route path="/mobile/camera" element={<CameraView />} />
               <Route path="/mobile/profile" element={<StudentProfile />} />
+              <Route path="/mobile/learning-materials" element={<LearningMaterials />} />
+              <Route path="/mobile/settings" element={<Settings />} />
 
               {/* Admin Panel Routes */}
               <Route path="/admin/login" element={<AdminLogin />} />

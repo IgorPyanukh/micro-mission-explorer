@@ -1,11 +1,13 @@
 
-import { useState, useRef } from "react";
-import { useNavigate } from "react-router-dom";
+import { useState, useRef, useEffect } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
 import MobileLayout from "@/components/mobile/MobileLayout";
 import { Button } from "@/components/ui/button";
 
 const CameraView = () => {
   const navigate = useNavigate();
+  const location = useLocation();
+  const { missionId } = location.state || {};
   const [isCaptured, setIsCaptured] = useState(false);
   const [isAnalyzing, setIsAnalyzing] = useState(false);
   const [classification, setClassification] = useState("");
@@ -33,14 +35,25 @@ const CameraView = () => {
   };
   
   const handleSave = () => {
-    navigate("/mobile/missions");
+    // In a real app, this would save the captured image and classification
+    // For prototype, we'll just navigate back with simulated data
+    if (missionId) {
+      navigate(`/mobile/mission/${missionId}`, {
+        state: {
+          capturedImage: "/placeholder.svg", // In a real app, this would be the actual image
+          classification: classification
+        }
+      });
+    } else {
+      navigate("/mobile/missions");
+    }
   };
   
   return (
     <MobileLayout 
       title="Camera" 
       showBackButton={true}
-      onBack={() => navigate("/mobile/missions")}
+      onBack={() => navigate(missionId ? `/mobile/mission/${missionId}` : "/mobile/missions")}
       showNavigation={false}
     >
       {/* Camera Preview */}
