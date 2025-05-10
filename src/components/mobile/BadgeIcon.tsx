@@ -4,7 +4,8 @@ import {
   Award,
   Check,
   Star,
-  BadgePlus
+  BadgePlus,
+  Badge
 } from "lucide-react";
 
 interface BadgeIconProps {
@@ -19,25 +20,10 @@ const BadgeIcon: React.FC<BadgeIconProps> = ({ badge, size = "md" }) => {
     lg: "w-20 h-20"
   };
   
-  const getBadgeIcon = () => {
-    switch(badge.type) {
-      case 'achievement':
-        return <Award className="w-3/4 h-3/4 text-white" />;
-      case 'completion':
-        return <Check className="w-3/4 h-3/4 text-white" />;
-      case 'excellence':
-        return <Star className="w-3/4 h-3/4 text-white" />;
-      case 'special':
-        return <BadgePlus className="w-3/4 h-3/4 text-white" />;
-      default:
-        return <Award className="w-3/4 h-3/4 text-white" />;
-    }
-  };
-  
   const getBadgeColorClasses = () => {
     switch(badge.color) {
       case 'blue':
-        return 'bg-blue-500';
+        return 'bg-cyan-500';
       case 'green':
         return 'bg-green-500';
       case 'red':
@@ -45,7 +31,7 @@ const BadgeIcon: React.FC<BadgeIconProps> = ({ badge, size = "md" }) => {
       case 'yellow':
         return 'bg-yellow-500';
       case 'purple':
-        return 'bg-purple-500';
+        return 'bg-violet-500';
       case 'orange':
         return 'bg-orange-500';
       default:
@@ -55,7 +41,7 @@ const BadgeIcon: React.FC<BadgeIconProps> = ({ badge, size = "md" }) => {
   
   return (
     <div className={`${getBadgeColorClasses()} ${sizeClasses[size]} rounded-full flex items-center justify-center shadow-md`}>
-      {getBadgeIcon()}
+      <Badge className="w-3/4 h-3/4 text-white stroke-[1.5]" />
     </div>
   );
 };
