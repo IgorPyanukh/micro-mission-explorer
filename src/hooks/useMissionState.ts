@@ -19,7 +19,13 @@ export const useMissionState = () => {
   
   // Find the mission by ID
   const mission = mockMissions.find(m => m.id === id);
-  const badge = mission?.badgeId ? mockBadges.find(b => b.id === mission.badgeId) : null;
+  
+  // Get the badge with proper color information
+  let badge: Badge | null = null;
+  if (mission?.badgeId) {
+    badge = mockBadges.find(b => b.id === mission.badgeId) || null;
+    console.log("Found badge:", badge); // Debug log
+  }
   
   // Check if there's a submission for this mission
   const submission = mockSubmissions.find(s => s.missionId === id);

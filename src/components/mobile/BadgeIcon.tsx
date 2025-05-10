@@ -17,6 +17,7 @@ const BadgeIcon: React.FC<BadgeIconProps> = ({ badge, size = "md" }) => {
   };
   
   const getBadgeColorClasses = () => {
+    // Make sure we're using the correct color property from the badge
     switch(badge.color) {
       case 'blue':
         return 'bg-app-blue';
@@ -31,9 +32,14 @@ const BadgeIcon: React.FC<BadgeIconProps> = ({ badge, size = "md" }) => {
       case 'orange':
         return 'bg-app-orange';
       default:
+        // If no color is specified, use gray as fallback
         return 'bg-gray-500';
     }
   };
+  
+  // Let's add console logs to help debug
+  console.log("Badge color:", badge.color);
+  console.log("Badge color class:", getBadgeColorClasses());
   
   return (
     <div className={`${getBadgeColorClasses()} ${sizeClasses[size]} rounded-full flex items-center justify-center shadow-md`}>

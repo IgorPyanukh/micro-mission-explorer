@@ -9,6 +9,9 @@ interface MissionBadgeProps {
 }
 
 const MissionBadge: React.FC<MissionBadgeProps> = ({ badge }) => {
+  // Add debug logging
+  console.log("MissionBadge rendering with badge:", badge);
+  
   return (
     <Card className="mb-20">
       <CardContent className="p-4">
