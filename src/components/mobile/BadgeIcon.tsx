@@ -1,4 +1,3 @@
-
 import { Badge as BadgeType } from "../../types";
 import { 
   Badge
@@ -17,9 +16,17 @@ const BadgeIcon: React.FC<BadgeIconProps> = ({ badge, size = "md" }) => {
   };
   
   const getBadgeColorClasses = () => {
-    // Make sure we're using the correct color property from the badge
-    switch(badge.color) {
+    // Fix color mapping to match the provided image
+    switch(badge.name.toLowerCase()) {
+      case 'plant explorer':
+        return 'bg-emerald-500'; // Green like in the image
+      case 'cell comparer':
+        return 'bg-purple-500';  // Purple like in the image
+      case 'first submission':
+        return 'bg-amber-400';   // Yellow/gold like in the image
+      // Keep other color mappings as fallbacks
       case 'blue':
+      case 'ocean explorer':
         return 'bg-app-blue';
       case 'green':
         return 'bg-app-green';
@@ -32,12 +39,24 @@ const BadgeIcon: React.FC<BadgeIconProps> = ({ badge, size = "md" }) => {
       case 'orange':
         return 'bg-app-orange';
       default:
-        // If no color is specified, use gray as fallback
-        return 'bg-gray-500';
+        // If we can't determine the color from the name, try the color property
+        if (badge.color) {
+          switch(badge.color) {
+            case 'blue': return 'bg-app-blue';
+            case 'green': return 'bg-app-green';
+            case 'red': return 'bg-app-red';
+            case 'yellow': return 'bg-app-yellow';
+            case 'purple': return 'bg-app-purple';
+            case 'orange': return 'bg-app-orange';
+            default: return 'bg-emerald-500'; // Default to green if unknown
+          }
+        }
+        return 'bg-emerald-500'; // Default to green if no color info available
     }
   };
   
   // Let's add console logs to help debug
+  console.log("Badge name:", badge.name);
   console.log("Badge color:", badge.color);
   console.log("Badge color class:", getBadgeColorClasses());
   
