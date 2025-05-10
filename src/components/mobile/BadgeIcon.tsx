@@ -1,10 +1,6 @@
 
 import { Badge as BadgeType } from "../../types";
 import { 
-  Award,
-  Check,
-  Star,
-  BadgePlus,
   Badge
 } from "lucide-react";
 
@@ -23,17 +19,17 @@ const BadgeIcon: React.FC<BadgeIconProps> = ({ badge, size = "md" }) => {
   const getBadgeColorClasses = () => {
     switch(badge.color) {
       case 'blue':
-        return 'bg-cyan-500';
+        return 'bg-app-blue';
       case 'green':
-        return 'bg-green-500';
+        return 'bg-app-green';
       case 'red':
-        return 'bg-red-500';
+        return 'bg-app-red';
       case 'yellow':
-        return 'bg-yellow-500';
+        return 'bg-app-yellow';
       case 'purple':
-        return 'bg-violet-500';
+        return 'bg-app-purple';
       case 'orange':
-        return 'bg-orange-500';
+        return 'bg-app-orange';
       default:
         return 'bg-gray-500';
     }
