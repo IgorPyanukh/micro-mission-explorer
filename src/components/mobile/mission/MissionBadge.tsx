@@ -13,7 +13,7 @@ const MissionBadge: React.FC<MissionBadgeProps> = ({ badge }) => {
   console.log("MissionBadge rendering with badge:", badge);
   
   return (
-    <Card className="mb-20">
+    <Card className="mb-6">
       <CardContent className="p-4">
         <h3 className="font-bold mb-3">Badge to Earn</h3>
         <div className="flex items-center">

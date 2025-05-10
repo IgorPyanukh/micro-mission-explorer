@@ -32,29 +32,36 @@ export const useMissionState = () => {
   
   // Effect to check if we're returning from the camera with an image
   useEffect(() => {
+    // If we're returning from camera with a captured image, update state
+    // This implements requirement #2 - handle camera return
     if (location.state?.capturedImage) {
       setCapturedImage(location.state.capturedImage);
       setMissionStatus("in-progress");
     }
     
-    // Check if mission exists and set its status
+    // If the mission already has a status, use that
     if (mission) {
-      setMissionStatus(mission.status);
+      if (mission.status !== "available") {
+        setMissionStatus(mission.status);
+      }
     }
     
     // If there's a submission for this mission, pre-fill the form fields
     if (submission) {
       if (submission.imageUrl) setCapturedImage(submission.imageUrl);
       if (submission.text) setAnswerText(submission.text);
+      setMissionStatus("in-progress"); // Show the submission form
     }
   }, [location.state, mission, submission]);
   
   const handleStartMission = () => {
+    // This implements part of requirement #2 - start mission and go to camera
     setMissionStatus("in-progress");
     navigate("/mobile/camera", { state: { missionId: id, returnTo: `/mobile/mission/${id}` } });
   };
   
   const handleSubmitMission = () => {
+    // Implement requirement #3 - submission validation and handling
     if (!capturedImage && mission?.requiresImage) {
       toast.error("Please capture an image for this mission");
       return;

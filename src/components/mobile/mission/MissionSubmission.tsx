@@ -1,4 +1,3 @@
-
 import React from "react";
 import { Mission } from "../../../types";
 import { Card, CardContent } from "@/components/ui/card";
@@ -37,7 +36,15 @@ const MissionSubmission: React.FC<MissionSubmissionProps> = ({
   
   // Use isReadOnly for completed or verified missions
   const isReadOnly = missionStatus === "completed" || missionStatus === "verified";
-  const showSubmissionForm = missionStatus !== "available" || mission.status === "completed" || mission.status === "verified";
+  
+  // Only show submission form if the mission is in-progress, completed, or verified
+  // This implements requirement #1 - hide submission section for available missions
+  const shouldShowSubmissionForm = missionStatus === "in-progress" || missionStatus === "completed" || missionStatus === "verified";
+  
+  // If we shouldn't show the submission form, return null
+  if (!shouldShowSubmissionForm) {
+    return null;
+  }
   
   return (
     <Card className="mb-4">

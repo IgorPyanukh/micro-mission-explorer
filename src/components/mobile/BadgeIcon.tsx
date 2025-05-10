@@ -24,20 +24,11 @@ const BadgeIcon: React.FC<BadgeIconProps> = ({ badge, size = "md" }) => {
         return 'bg-purple-500';  // Purple like in the image
       case 'first submission':
         return 'bg-amber-400';   // Yellow/gold like in the image
-      // Keep other color mappings as fallbacks
-      case 'blue':
       case 'ocean explorer':
         return 'bg-app-blue';
-      case 'green':
-        return 'bg-app-green';
-      case 'red':
+      case 'blood analyst':
         return 'bg-app-red';
-      case 'yellow':
-        return 'bg-app-yellow';
-      case 'purple':
-        return 'bg-app-purple';
-      case 'orange':
-        return 'bg-app-orange';
+      // Keep other color mappings as fallbacks  
       default:
         // If we can't determine the color from the name, try the color property
         if (badge.color) {
@@ -54,11 +45,6 @@ const BadgeIcon: React.FC<BadgeIconProps> = ({ badge, size = "md" }) => {
         return 'bg-emerald-500'; // Default to green if no color info available
     }
   };
-  
-  // Let's add console logs to help debug
-  console.log("Badge name:", badge.name);
-  console.log("Badge color:", badge.color);
-  console.log("Badge color class:", getBadgeColorClasses());
   
   return (
     <div className={`${getBadgeColorClasses()} ${sizeClasses[size]} rounded-full flex items-center justify-center shadow-md`}>
