@@ -29,7 +29,7 @@ const StudentList: React.FC<StudentListProps> = ({
     
   return (
     <div className="lg:col-span-1">
-      <div className="bg-white rounded-xl shadow-sm p-4 mb-6">
+      <div className="bg-white rounded-xl shadow-sm p-4">
         <div className="flex justify-between items-center mb-4">
           <div className="w-full">
             <Input
@@ -80,13 +80,6 @@ const StudentList: React.FC<StudentListProps> = ({
           )}
         </div>
       </div>
-      
-      <Button 
-        className="bg-app-blue hover:bg-blue-700 w-full"
-        onClick={onAddNewClick}
-      >
-        <Plus className="mr-1" /> Add New Student
-      </Button>
     </div>
   );
 };

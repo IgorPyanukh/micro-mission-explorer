@@ -1,6 +1,8 @@
 
 import { useState } from "react";
 import AdminLayout from "@/components/admin/AdminLayout";
+import { Button } from "@/components/ui/button";
+import { Plus } from "lucide-react";
 import { leaderboardData, mockMissions, studentProgress } from "@/data/mockData";
 import StudentList from "@/components/admin/student/StudentList";
 import StudentDetail from "@/components/admin/student/StudentDetail";
@@ -29,6 +31,12 @@ const StudentManagement = () => {
           <h2 className="text-2xl font-bold">Students</h2>
           <p className="text-gray-600">Manage student accounts and track performance</p>
         </div>
+        <Button 
+          className="bg-app-blue hover:bg-blue-700"
+          onClick={() => setNewStudentDialogOpen(true)}
+        >
+          <Plus className="mr-1" /> Add New Student
+        </Button>
       </div>
       
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
