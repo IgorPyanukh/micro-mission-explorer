@@ -1,6 +1,7 @@
 
 import { Link } from "react-router-dom";
 import { Mission } from "../../types";
+import { Play } from "lucide-react";
 
 interface MissionCardProps {
   mission: Mission;
@@ -63,6 +64,14 @@ const MissionCard: React.FC<MissionCardProps> = ({ mission }) => {
             <line x1="3" x2="21" y1="10" y2="10"/>
           </svg>
           Due: {new Date(mission.deadline).toLocaleDateString()}
+        </div>
+      )}
+      
+      {mission.status === "available" && (
+        <div className="mt-2">
+          <Link to={`/mobile/mission/${mission.id}`} className="inline-flex items-center text-app-blue font-medium text-sm">
+            <Play className="mr-1 w-4 h-4" /> Start Mission
+          </Link>
         </div>
       )}
     </Link>

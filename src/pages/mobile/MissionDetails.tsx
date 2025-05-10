@@ -10,6 +10,7 @@ import { mockMissions, mockBadges } from "@/data/mockData";
 import { Label } from "@/components/ui/label";
 import { toast } from "sonner";
 import BadgeIcon from "@/components/mobile/BadgeIcon";
+import { Check, Play } from "lucide-react";
 
 const MissionDetails = () => {
   const { id } = useParams();
@@ -261,7 +262,7 @@ const MissionDetails = () => {
             onClick={handleStartMission}
             className="w-full bg-app-blue hover:bg-blue-700"
           >
-            Start Mission
+            <Play className="mr-2" /> Start Mission
           </Button>
         ) : missionStatus === "in-progress" ? (
           <Button 
@@ -269,7 +270,7 @@ const MissionDetails = () => {
             className="w-full bg-app-green hover:bg-green-700"
             disabled={isSubmitting}
           >
-            {isSubmitting ? "Submitting..." : "Submit Mission"}
+            <Check className="mr-2" /> {isSubmitting ? "Submitting..." : "Submit Mission"}
           </Button>
         ) : (
           <Button disabled className="w-full bg-gray-400">

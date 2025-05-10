@@ -1,9 +1,12 @@
-
 import { useState } from "react";
 import AdminLayout from "@/components/admin/AdminLayout";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { leaderboardData, mockMissions, studentProgress } from "@/data/mockData";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
+import { Label } from "@/components/ui/label";
+import { toast } from "sonner";
+import { Plus } from "lucide-react";
 
 // Mock student data (expanded from leaderboardData)
 const students = leaderboardData.map(student => ({
@@ -16,6 +19,11 @@ const students = leaderboardData.map(student => ({
 const StudentManagement = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedStudent, setSelectedStudent] = useState<string | null>(null);
+  const [newStudentDialogOpen, setNewStudentDialogOpen] = useState(false);
+  const [newStudentName, setNewStudentName] = useState("");
+  const [newStudentEmail, setNewStudentEmail] = useState("");
+  const [newStudentGrade, setNewStudentGrade] = useState("6");
+  const [newStudentClass, setNewStudentClass] = useState("Biology 101");
   
   const filteredStudents = searchQuery
     ? students.filter(student => 
@@ -26,6 +34,26 @@ const StudentManagement = () => {
     
   const selectedStudentData = students.find(s => s.studentId === selectedStudent);
   
+  const handleAddStudent = () => {
+    if (!newStudentName || !newStudentEmail) {
+      toast.error("Please fill in all required fields");
+      return;
+    }
+    
+    // In a real app, this would send a request to add a new student
+    // For this demo, we'll just show a success message
+    toast.success(`Added new student: ${newStudentName}`);
+    setNewStudentDialogOpen(false);
+    resetNewStudentForm();
+  };
+  
+  const resetNewStudentForm = () => {
+    setNewStudentName("");
+    setNewStudentEmail("");
+    setNewStudentGrade("6");
+    setNewStudentClass("Biology 101");
+  };
+  
   return (
     <AdminLayout title="Student Management">
       <div className="flex justify-between items-center mb-6">
@@ -33,8 +61,11 @@ const StudentManagement = () => {
           <h2 className="text-2xl font-bold">Students</h2>
           <p className="text-gray-600">Manage student accounts and track performance</p>
         </div>
-        <Button className="bg-app-blue hover:bg-blue-700">
-          Add New Student
+        <Button 
+          className="bg-app-blue hover:bg-blue-700"
+          onClick={() => setNewStudentDialogOpen(true)}
+        >
+          <Plus className="mr-1" /> Add New Student
         </Button>
       </div>
       
@@ -236,6 +267,73 @@ const StudentManagement = () => {
           )}
         </div>
       </div>
+      
+      {/* Add New Student Dialog */}
+      <Dialog open={newStudentDialogOpen} onOpenChange={setNewStudentDialogOpen}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Add New Student</DialogTitle>
+          </DialogHeader>
+          
+          <div className="space-y-4 py-4">
+            <div className="space-y-2">
+              <Label htmlFor="name">Full Name <span className="text-red-500">*</span></Label>
+              <Input 
+                id="name" 
+                value={newStudentName}
+                onChange={(e) => setNewStudentName(e.target.value)}
+                placeholder="John Doe"
+                required
+              />
+            </div>
+            
+            <div className="space-y-2">
+              <Label htmlFor="email">Email <span className="text-red-500">*</span></Label>
+              <Input 
+                id="email" 
+                type="email"
+                value={newStudentEmail}
+                onChange={(e) => setNewStudentEmail(e.target.value)}
+                placeholder="john.doe@school.edu"
+                required
+              />
+            </div>
+            
+            <div className="grid grid-cols-2 gap-4">
+              <div className="space-y-2">
+                <Label htmlFor="grade">Grade</Label>
+                <Input 
+                  id="grade" 
+                  type="number"
+                  min={6}
+                  max={12}
+                  value={newStudentGrade}
+                  onChange={(e) => setNewStudentGrade(e.target.value)}
+                />
+              </div>
+              
+              <div className="space-y-2">
+                <Label htmlFor="class">Class</Label>
+                <Input 
+                  id="class" 
+                  value={newStudentClass}
+                  onChange={(e) => setNewStudentClass(e.target.value)}
+                  placeholder="Biology 101"
+                />
+              </div>
+            </div>
+          </div>
+          
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setNewStudentDialogOpen(false)}>
+              Cancel
+            </Button>
+            <Button onClick={handleAddStudent}>
+              Add Student
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </AdminLayout>
   );
 };
