@@ -1,9 +1,16 @@
 
-import { Badge } from "../../types";
-import { Award, Check, Star, Trophy, Zap, BadgeCheck, BadgePlus, BadgeInfo, BadgeHelp, BadgeAlert } from "lucide-react";
+import { Badge as BadgeType } from "../../types";
+import { 
+  Badge, 
+  BadgeCheck, 
+  BadgePlus, 
+  BadgeInfo, 
+  Star, 
+  Trophy 
+} from "lucide-react";
 
 interface BadgeIconProps {
-  badge: Badge;
+  badge: BadgeType;
   size?: "sm" | "md" | "lg";
 }
 
@@ -25,7 +32,7 @@ const BadgeIcon: React.FC<BadgeIconProps> = ({ badge, size = "md" }) => {
       case 'special':
         return <BadgePlus className="w-3/4 h-3/4 text-white" />;
       default:
-        return <BadgeInfo className="w-3/4 h-3/4 text-white" />;
+        return <Badge className="w-3/4 h-3/4 text-white" />;
     }
   };
   
@@ -52,7 +59,7 @@ const BadgeIcon: React.FC<BadgeIconProps> = ({ badge, size = "md" }) => {
   return (
     <div className={`badge-icon ${getBadgeColorClasses()} ${sizeClasses[size]} rounded-full flex items-center justify-center`}>
       {badge.imageUrl ? (
-        <img src={badge.imageUrl} alt={badge.name} className="w-3/4 h-3/4" />
+        <img src={badge.imageUrl} alt={badge.name} className="w-3/4 h-3/4 object-cover" />
       ) : (
         getBadgeIcon()
       )}
