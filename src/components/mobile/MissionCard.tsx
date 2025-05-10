@@ -1,7 +1,8 @@
 
 import { Link } from "react-router-dom";
 import { Mission } from "../../types";
-import { Play } from "lucide-react";
+import { Play, ArrowRight } from "lucide-react";
+import { Button } from "../ui/button";
 
 interface MissionCardProps {
   mission: Mission;
@@ -23,7 +24,7 @@ const MissionCard: React.FC<MissionCardProps> = ({ mission }) => {
   };
   
   return (
-    <Link to={`/mobile/mission/${mission.id}`} className="mission-card mb-4">
+    <div className="mission-card mb-4">
       <span className={`mission-badge ${statusColors[mission.status]}`}>
         {statusLabels[mission.status]}
       </span>
@@ -67,14 +68,32 @@ const MissionCard: React.FC<MissionCardProps> = ({ mission }) => {
         </div>
       )}
       
-      {mission.status === "available" && (
-        <div className="mt-2">
-          <Link to={`/mobile/mission/${mission.id}`} className="inline-flex items-center text-app-blue font-medium text-sm">
-            <Play className="mr-1 w-4 h-4" /> Start Mission
+      <div className="mt-3 flex">
+        {mission.status === "available" && (
+          <Link to={`/mobile/mission/${mission.id}`} className="w-full">
+            <Button className="w-full bg-app-blue hover:bg-blue-700">
+              <Play className="mr-2 w-4 h-4" /> Start Mission
+            </Button>
           </Link>
-        </div>
-      )}
-    </Link>
+        )}
+        
+        {mission.status === "in-progress" && (
+          <Link to={`/mobile/mission/${mission.id}`} className="w-full">
+            <Button variant="outline" className="w-full text-app-blue border-app-blue">
+              Continue Mission <ArrowRight className="ml-2 w-4 h-4" />
+            </Button>
+          </Link>
+        )}
+        
+        {(mission.status === "completed" || mission.status === "verified") && (
+          <Link to={`/mobile/mission/${mission.id}`} className="w-full">
+            <Button variant="ghost" className="w-full text-gray-600">
+              View Details <ArrowRight className="ml-2 w-4 h-4" />
+            </Button>
+          </Link>
+        )}
+      </div>
+    </div>
   );
 };
 

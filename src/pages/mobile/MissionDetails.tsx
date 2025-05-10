@@ -10,7 +10,9 @@ import { mockMissions, mockBadges } from "@/data/mockData";
 import { Label } from "@/components/ui/label";
 import { toast } from "sonner";
 import BadgeIcon from "@/components/mobile/BadgeIcon";
-import { Check, Play } from "lucide-react";
+import { Check, Play, Camera, ArrowRight } from "lucide-react";
+import { Card, CardContent } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
 
 const MissionDetails = () => {
   const { id } = useParams();
@@ -33,7 +35,12 @@ const MissionDetails = () => {
       setCapturedImage(location.state.capturedImage);
       setMissionStatus("in-progress");
     }
-  }, [location.state]);
+    
+    // Check if mission exists and set its status
+    if (mission) {
+      setMissionStatus(mission.status);
+    }
+  }, [location.state, mission]);
   
   const handleStartMission = () => {
     // In a real app, update mission status to "in-progress"
@@ -91,7 +98,7 @@ const MissionDetails = () => {
       showNavigation={false}
     >
       {/* Mission Header */}
-      <div className="bg-white rounded-xl shadow-sm overflow-hidden mb-4">
+      <Card className="mb-4 overflow-hidden">
         <div className="h-32 bg-gradient-to-r from-app-blue to-blue-500 flex items-center justify-center">
           {mission.imageUrl ? (
             <img src={mission.imageUrl} alt={mission.title} className="w-full h-full object-cover" />
@@ -103,12 +110,10 @@ const MissionDetails = () => {
           )}
         </div>
         
-        <div className="p-4">
+        <CardContent className="p-4">
           <div className="flex justify-between items-start">
             <h2 className="text-xl font-bold">{mission.title}</h2>
-            <span className="bg-app-orange text-white rounded-full px-3 py-1 text-sm font-semibold">
-              {mission.points} pts
-            </span>
+            <Badge className="bg-app-orange">{mission.points} pts</Badge>
           </div>
           
           <p className="text-gray-600 my-3">{mission.description}</p>
@@ -124,135 +129,138 @@ const MissionDetails = () => {
               Due: {new Date(mission.deadline).toLocaleDateString()}
             </div>
           )}
-        </div>
-      </div>
+        </CardContent>
+      </Card>
       
       {/* Instructions */}
-      <div className="bg-white rounded-xl shadow-sm p-4 mb-4">
-        <h3 className="font-bold mb-3">Instructions</h3>
-        {mission.instructions.split("\n").map((line, index) => (
-          <p key={index} className="mb-2 text-sm">{line}</p>
-        ))}
-      </div>
+      <Card className="mb-4">
+        <CardContent className="p-4">
+          <h3 className="font-bold mb-3">Instructions</h3>
+          {mission.instructions.split("\n").map((line, index) => (
+            <p key={index} className="mb-2 text-sm">{line}</p>
+          ))}
+        </CardContent>
+      </Card>
       
       {/* Mission Submission Form - Only shown when mission is in progress */}
       {missionStatus === "in-progress" && (
-        <div className="bg-white rounded-xl shadow-sm p-4 mb-4">
-          <h3 className="font-bold mb-3">Your Submission</h3>
-          
-          {/* Image Preview - Only shown if image is captured */}
-          {capturedImage ? (
-            <div className="mb-4">
-              <h4 className="text-sm font-medium mb-2">Captured Image:</h4>
-              <div className="rounded-lg overflow-hidden bg-gray-100 h-48 flex items-center justify-center">
-                <img 
-                  src={capturedImage} 
-                  alt="Captured for mission" 
-                  className="w-full h-full object-contain"
-                />
+        <Card className="mb-4">
+          <CardContent className="p-4">
+            <h3 className="font-bold mb-3">Your Submission</h3>
+            
+            {/* Image Preview - Only shown if image is captured */}
+            {capturedImage ? (
+              <div className="mb-4">
+                <h4 className="text-sm font-medium mb-2">Captured Image:</h4>
+                <div className="rounded-lg overflow-hidden bg-gray-100 h-48 flex items-center justify-center">
+                  <img 
+                    src={capturedImage} 
+                    alt="Captured for mission" 
+                    className="w-full h-full object-contain"
+                  />
+                </div>
+                <div className="flex justify-end mt-2">
+                  <Button 
+                    variant="outline" 
+                    size="sm"
+                    onClick={() => navigate("/mobile/camera", { 
+                      state: { missionId: id, returnTo: `/mobile/mission/${id}` } 
+                    })}
+                  >
+                    <Camera className="mr-2 w-4 h-4" /> Recapture
+                  </Button>
+                </div>
               </div>
-              <div className="flex justify-end mt-2">
-                <Button 
-                  variant="outline" 
-                  size="sm" 
+            ) : mission.requiresImage && (
+              <div className="mb-4">
+                <Button
+                  variant="outline"
+                  className="w-full py-8 border-dashed border-2"
                   onClick={() => navigate("/mobile/camera", { 
                     state: { missionId: id, returnTo: `/mobile/mission/${id}` } 
                   })}
                 >
-                  Recapture
+                  <div className="flex flex-col items-center">
+                    <Camera className="mb-2 w-6 h-6" />
+                    <span>Take photo</span>
+                  </div>
                 </Button>
               </div>
-            </div>
-          ) : mission.requiresImage && (
-            <div className="mb-4">
-              <Button
-                variant="outline"
-                className="w-full py-8 border-dashed border-2"
-                onClick={() => navigate("/mobile/camera", { 
-                  state: { missionId: id, returnTo: `/mobile/mission/${id}` } 
-                })}
-              >
-                <div className="flex flex-col items-center">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="mb-2">
-                    <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/>
-                    <circle cx="12" cy="13" r="4"/>
-                  </svg>
-                  <span>Take photo</span>
-                </div>
-              </Button>
-            </div>
-          )}
-          
-          {/* Text Answer Field - If required */}
-          {mission.requiresText && (
-            <div className="mb-4">
-              <Label htmlFor="answer" className="block mb-2">
-                Your Answer:
-              </Label>
-              <Textarea 
-                id="answer"
-                placeholder="Enter your response here..." 
-                className="w-full" 
-                value={answerText}
-                onChange={(e) => setAnswerText(e.target.value)}
-              />
-            </div>
-          )}
-          
-          {/* Multiple Choice - If required */}
-          {mission.hasMultipleChoice && (
-            <div className="mb-4">
-              <Label className="block mb-2">Select one option:</Label>
-              <RadioGroup value={selectedOption} onValueChange={setSelectedOption}>
-                <div className="flex items-center space-x-2 mb-2">
-                  <RadioGroupItem value="optionA" id="optionA" />
-                  <Label htmlFor="optionA">Plant Cell</Label>
-                </div>
-                <div className="flex items-center space-x-2 mb-2">
-                  <RadioGroupItem value="optionB" id="optionB" />
-                  <Label htmlFor="optionB">Animal Cell</Label>
-                </div>
-                <div className="flex items-center space-x-2">
-                  <RadioGroupItem value="optionC" id="optionC" />
-                  <Label htmlFor="optionC">Bacterial Cell</Label>
-                </div>
-              </RadioGroup>
-            </div>
-          )}
-          
-          {/* Numeric Input - If required */}
-          {mission.requiresNumericInput && (
-            <div className="mb-4">
-              <Label htmlFor="numeric" className="block mb-2">
-                Measurement (in micrometers):
-              </Label>
-              <Input 
-                id="numeric"
-                type="number" 
-                placeholder="0" 
-                className="w-full" 
-                value={numericValue || ''}
-                onChange={(e) => setNumericValue(parseInt(e.target.value) || 0)}
-              />
-            </div>
-          )}
-        </div>
+            )}
+            
+            {/* Text Answer Field - If required */}
+            {mission.requiresText && (
+              <div className="mb-4">
+                <Label htmlFor="answer" className="block mb-2">
+                  Your Answer:
+                </Label>
+                <Textarea 
+                  id="answer"
+                  placeholder="Enter your response here..." 
+                  className="w-full" 
+                  value={answerText}
+                  onChange={(e) => setAnswerText(e.target.value)}
+                />
+              </div>
+            )}
+            
+            {/* Multiple Choice - If required */}
+            {mission.hasMultipleChoice && (
+              <div className="mb-4">
+                <Label className="block mb-2">Select one option:</Label>
+                <RadioGroup value={selectedOption} onValueChange={setSelectedOption}>
+                  <div className="flex items-center space-x-2 mb-2">
+                    <RadioGroupItem value="optionA" id="optionA" />
+                    <Label htmlFor="optionA">Plant Cell</Label>
+                  </div>
+                  <div className="flex items-center space-x-2 mb-2">
+                    <RadioGroupItem value="optionB" id="optionB" />
+                    <Label htmlFor="optionB">Animal Cell</Label>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <RadioGroupItem value="optionC" id="optionC" />
+                    <Label htmlFor="optionC">Bacterial Cell</Label>
+                  </div>
+                </RadioGroup>
+              </div>
+            )}
+            
+            {/* Numeric Input - If required */}
+            {mission.requiresNumericInput && (
+              <div className="mb-4">
+                <Label htmlFor="numeric" className="block mb-2">
+                  Measurement (in micrometers):
+                </Label>
+                <Input 
+                  id="numeric"
+                  type="number" 
+                  placeholder="0" 
+                  className="w-full" 
+                  value={numericValue || ''}
+                  onChange={(e) => setNumericValue(parseInt(e.target.value) || 0)}
+                />
+              </div>
+            )}
+          </CardContent>
+        </Card>
       )}
       
       {/* Badge to Earn */}
       {badge && (
-        <div className="bg-white rounded-xl shadow-sm p-4 mb-4">
-          <h3 className="font-bold mb-3">Badge to Earn</h3>
-          <div className="flex items-center">
-            <div className="mr-3">
-              <BadgeIcon badge={badge} size="md" />
+        <Card className="mb-20">
+          <CardContent className="p-4">
+            <h3 className="font-bold mb-3">Badge to Earn</h3>
+            <div className="flex items-center">
+              <div className="mr-3">
+                <BadgeIcon badge={badge} size="md" />
+              </div>
+              <div>
+                <h4 className="font-semibold">{badge.name}</h4>
+                <p className="text-sm text-gray-600">{badge.description}</p>
+              </div>
             </div>
-            <div>
-              <h4 className="font-semibold">{badge.name}</h4>
-              <p className="text-sm text-gray-600">{badge.description}</p>
-            </div>
-          </div>
-        </div>
+          </CardContent>
+        </Card>
       )}
       
       {/* Action Button */}
@@ -260,21 +268,24 @@ const MissionDetails = () => {
         {missionStatus === "available" ? (
           <Button 
             onClick={handleStartMission}
-            className="w-full bg-app-blue hover:bg-blue-700"
+            className="w-full bg-app-blue hover:bg-blue-700 py-6 text-lg"
           >
             <Play className="mr-2" /> Start Mission
           </Button>
         ) : missionStatus === "in-progress" ? (
           <Button 
             onClick={handleSubmitMission}
-            className="w-full bg-app-green hover:bg-green-700"
+            className="w-full bg-app-green hover:bg-green-700 py-6 text-lg"
             disabled={isSubmitting}
           >
             <Check className="mr-2" /> {isSubmitting ? "Submitting..." : "Submit Mission"}
           </Button>
         ) : (
-          <Button disabled className="w-full bg-gray-400">
-            Mission Completed
+          <Button 
+            onClick={() => navigate("/mobile/missions")}
+            className="w-full bg-app-blue hover:bg-blue-700 py-6 text-lg"
+          >
+            <ArrowRight className="mr-2" /> Back to Missions
           </Button>
         )}
       </div>
