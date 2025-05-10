@@ -1,6 +1,7 @@
+
 import { Badge as BadgeType } from "../../types";
 import { 
-  Badge
+  Award
 } from "lucide-react";
 
 interface BadgeIconProps {
@@ -48,7 +49,7 @@ const BadgeIcon: React.FC<BadgeIconProps> = ({ badge, size = "md" }) => {
   
   return (
     <div className={`${getBadgeColorClasses()} ${sizeClasses[size]} rounded-full flex items-center justify-center shadow-md`}>
-      <Badge className="w-3/4 h-3/4 text-white stroke-[1.5]" />
+      <Award className="w-3/4 h-3/4 text-white stroke-[1.5]" />
     </div>
   );
 };
