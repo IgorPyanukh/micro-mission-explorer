@@ -1,7 +1,6 @@
 
 import { Link } from "react-router-dom";
 import { Mission } from "../../types";
-import { ArrowRight } from "lucide-react";
 
 interface MissionCardProps {
   mission: Mission;
@@ -67,10 +66,6 @@ const MissionCard: React.FC<MissionCardProps> = ({ mission }) => {
             Due: {new Date(mission.deadline).toLocaleDateString()}
           </div>
         )}
-        
-        <div className="mt-3 flex justify-end">
-          <ArrowRight className="text-gray-400 w-5 h-5" />
-        </div>
       </div>
     </Link>
   );

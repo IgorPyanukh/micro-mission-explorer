@@ -1,12 +1,10 @@
 
 import { Badge as BadgeType } from "../../types";
 import { 
-  Badge, 
-  BadgeCheck, 
-  BadgePlus, 
-  BadgeInfo, 
-  Star, 
-  Trophy 
+  Award,
+  Check,
+  Star,
+  BadgePlus
 } from "lucide-react";
 
 interface BadgeIconProps {
@@ -24,15 +22,15 @@ const BadgeIcon: React.FC<BadgeIconProps> = ({ badge, size = "md" }) => {
   const getBadgeIcon = () => {
     switch(badge.type) {
       case 'achievement':
-        return <Trophy className="w-3/4 h-3/4 text-white" />;
+        return <Award className="w-3/4 h-3/4 text-white" />;
       case 'completion':
-        return <BadgeCheck className="w-3/4 h-3/4 text-white" />;
+        return <Check className="w-3/4 h-3/4 text-white" />;
       case 'excellence':
         return <Star className="w-3/4 h-3/4 text-white" />;
       case 'special':
         return <BadgePlus className="w-3/4 h-3/4 text-white" />;
       default:
-        return <Badge className="w-3/4 h-3/4 text-white" />;
+        return <Award className="w-3/4 h-3/4 text-white" />;
     }
   };
   
@@ -59,7 +57,7 @@ const BadgeIcon: React.FC<BadgeIconProps> = ({ badge, size = "md" }) => {
   return (
     <div className={`badge-icon ${getBadgeColorClasses()} ${sizeClasses[size]} rounded-full flex items-center justify-center`}>
       {badge.imageUrl ? (
-        <img src={badge.imageUrl} alt={badge.name} className="w-3/4 h-3/4 object-cover" />
+        <img src={badge.imageUrl} alt={badge.name} className="w-3/4 h-3/4 object-cover rounded-full" />
       ) : (
         getBadgeIcon()
       )}
