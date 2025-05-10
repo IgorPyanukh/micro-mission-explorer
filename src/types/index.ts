@@ -61,3 +61,6 @@ export interface Class {
   students: string[]; // student IDs
   missions: string[]; // mission IDs
 }
+
+// Re-export student types
+export * from "./student";
