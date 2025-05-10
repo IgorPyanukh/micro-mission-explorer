@@ -1,6 +1,6 @@
 
 import { Badge } from "../../types";
-import { Award, Check, Star, Trophy, Zap } from "lucide-react";
+import { Award, Check, Star, Trophy, Zap, BadgeCheck, BadgePlus, BadgeInfo, BadgeHelp, BadgeAlert } from "lucide-react";
 
 interface BadgeIconProps {
   badge: Badge;
@@ -19,13 +19,13 @@ const BadgeIcon: React.FC<BadgeIconProps> = ({ badge, size = "md" }) => {
       case 'achievement':
         return <Trophy className="w-3/4 h-3/4 text-white" />;
       case 'completion':
-        return <Check className="w-3/4 h-3/4 text-white" />;
+        return <BadgeCheck className="w-3/4 h-3/4 text-white" />;
       case 'excellence':
         return <Star className="w-3/4 h-3/4 text-white" />;
       case 'special':
-        return <Zap className="w-3/4 h-3/4 text-white" />;
+        return <BadgePlus className="w-3/4 h-3/4 text-white" />;
       default:
-        return <Award className="w-3/4 h-3/4 text-white" />;
+        return <BadgeInfo className="w-3/4 h-3/4 text-white" />;
     }
   };
   
