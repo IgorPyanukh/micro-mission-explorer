@@ -34,7 +34,6 @@ const BadgeIcon: React.FC<BadgeIconProps> = ({ badge, size = "md" }) => {
     }
   };
   
-  // Update badge colors to match the provided image
   const getBadgeColorClasses = () => {
     switch(badge.color) {
       case 'blue':
@@ -55,12 +54,8 @@ const BadgeIcon: React.FC<BadgeIconProps> = ({ badge, size = "md" }) => {
   };
   
   return (
-    <div className={`badge-icon ${getBadgeColorClasses()} ${sizeClasses[size]} rounded-full flex items-center justify-center shadow-md`}>
-      {badge.imageUrl ? (
-        <img src={badge.imageUrl} alt={badge.name} className="w-3/4 h-3/4 object-cover rounded-full" />
-      ) : (
-        getBadgeIcon()
-      )}
+    <div className={`${getBadgeColorClasses()} ${sizeClasses[size]} rounded-full flex items-center justify-center shadow-md`}>
+      {getBadgeIcon()}
     </div>
   );
 };

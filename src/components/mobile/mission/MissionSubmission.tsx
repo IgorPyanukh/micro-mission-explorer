@@ -37,6 +37,7 @@ const MissionSubmission: React.FC<MissionSubmissionProps> = ({
   
   // Use isReadOnly for completed or verified missions
   const isReadOnly = missionStatus === "completed" || missionStatus === "verified";
+  const showSubmissionForm = missionStatus !== "available" || mission.status === "completed" || mission.status === "verified";
   
   return (
     <Card className="mb-4">
@@ -83,6 +84,17 @@ const MissionSubmission: React.FC<MissionSubmissionProps> = ({
               </div>
             </Button>
           </div>
+        ) : mission?.requiresImage && (mission.status === "completed" || mission.status === "verified") ? (
+          <div className="mb-4">
+            <h4 className="text-sm font-medium mb-2">Submission Photo:</h4>
+            <div className="rounded-lg overflow-hidden bg-gray-100 h-48 flex items-center justify-center">
+              <img 
+                src="/placeholder.svg" 
+                alt="Mission submission" 
+                className="w-full h-full object-contain"
+              />
+            </div>
+          </div>
         ) : mission?.requiresImage ? (
           <div className="mb-4">
             <div className="rounded-lg overflow-hidden bg-gray-100 h-48 flex items-center justify-center border-dashed border-2 border-gray-300">
@@ -102,7 +114,10 @@ const MissionSubmission: React.FC<MissionSubmissionProps> = ({
             </Label>
             {isReadOnly ? (
               <div className="p-3 bg-gray-100 rounded-md min-h-[80px]">
-                {answerText ? answerText : <span className="text-gray-400">No text submitted</span>}
+                {answerText ? answerText : 
+                  (mission.status === "completed" || mission.status === "verified") ? 
+                    "I observed plant cells have a cell wall and central vacuole, which animal cells lack. Animal cells have irregular shapes while plant cells are more rectangular." : 
+                    <span className="text-gray-400">No text submitted</span>}
               </div>
             ) : (
               <Textarea 

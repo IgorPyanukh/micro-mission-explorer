@@ -2,7 +2,7 @@
 import { useState, useEffect } from "react";
 import { useParams, useLocation, useNavigate } from "react-router-dom";
 import { toast } from "sonner";
-import { mockMissions, mockBadges } from "@/data/mockData";
+import { mockMissions, mockBadges, mockSubmissions } from "@/data/mockData";
 import { Mission, Badge } from "../types";
 
 export const useMissionState = () => {
@@ -21,6 +21,9 @@ export const useMissionState = () => {
   const mission = mockMissions.find(m => m.id === id);
   const badge = mission?.badgeId ? mockBadges.find(b => b.id === mission.badgeId) : null;
   
+  // Check if there's a submission for this mission
+  const submission = mockSubmissions.find(s => s.missionId === id);
+  
   // Effect to check if we're returning from the camera with an image
   useEffect(() => {
     if (location.state?.capturedImage) {
@@ -32,7 +35,13 @@ export const useMissionState = () => {
     if (mission) {
       setMissionStatus(mission.status);
     }
-  }, [location.state, mission]);
+    
+    // If there's a submission for this mission, pre-fill the form fields
+    if (submission) {
+      if (submission.imageUrl) setCapturedImage(submission.imageUrl);
+      if (submission.text) setAnswerText(submission.text);
+    }
+  }, [location.state, mission, submission]);
   
   const handleStartMission = () => {
     setMissionStatus("in-progress");
@@ -77,6 +86,7 @@ export const useMissionState = () => {
     navigateBack,
     setAnswerText,
     setSelectedOption,
-    setNumericValue
+    setNumericValue,
+    submission
   };
 };
