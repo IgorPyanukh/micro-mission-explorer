@@ -35,6 +35,7 @@ const MissionSubmission: React.FC<MissionSubmissionProps> = ({
 }) => {
   const navigate = useNavigate();
   
+  // Use isReadOnly for completed or verified missions
   const isReadOnly = missionStatus === "completed" || missionStatus === "verified";
   
   return (
