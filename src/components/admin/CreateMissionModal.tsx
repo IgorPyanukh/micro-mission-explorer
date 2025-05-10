@@ -160,7 +160,7 @@ const CreateMissionModal = ({ isOpen, onClose, onCreateMission }: CreateMissionM
                   <SelectValue placeholder="Select a badge" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="">None</SelectItem>
+                  <SelectItem value="none">None</SelectItem>
                   {mockBadges.map((badge) => (
                     <SelectItem key={badge.id} value={badge.id}>
                       {badge.name}
