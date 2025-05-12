@@ -4,6 +4,8 @@ import { useNavigate } from "react-router-dom";
 import MobileLayout from "@/components/mobile/MobileLayout";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Search } from "lucide-react";
 import { toast } from "sonner";
 
 // Mock learning materials data
@@ -60,10 +62,15 @@ const LearningMaterials = () => {
   const navigate = useNavigate();
   const [selectedMaterial, setSelectedMaterial] = useState<string | null>(null);
   const [activeTab, setActiveTab] = useState("all");
+  const [searchTerm, setSearchTerm] = useState("");
   
-  const filteredMaterials = activeTab === "all" 
-    ? learningMaterials 
-    : learningMaterials.filter(material => material.type === activeTab);
+  // Filter materials based on both tab selection and search term
+  const filteredMaterials = learningMaterials
+    .filter(material => activeTab === "all" || material.type === activeTab)
+    .filter(material => 
+      material.title.toLowerCase().includes(searchTerm.toLowerCase()) || 
+      material.description.toLowerCase().includes(searchTerm.toLowerCase())
+    );
   
   const handleMaterialSelect = (id: string) => {
     setSelectedMaterial(id);
@@ -82,6 +89,17 @@ const LearningMaterials = () => {
       onBack={() => navigate("/mobile/profile")}
     >
       <div className="pb-20">
+        {/* Search Input */}
+        <div className="relative mb-4">
+          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
+          <Input 
+            className="pl-9 pr-4 py-2 w-full rounded-lg"
+            placeholder="Search materials..." 
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+          />
+        </div>
+        
         <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full mb-4">
           <TabsList className="grid grid-cols-3 w-full">
             <TabsTrigger value="all">All</TabsTrigger>
@@ -91,45 +109,51 @@ const LearningMaterials = () => {
         </Tabs>
         
         <div className="space-y-3">
-          {filteredMaterials.map((material) => (
-            <div 
-              key={material.id} 
-              className={`bg-white rounded-xl shadow-sm overflow-hidden ${
-                selectedMaterial === material.id ? 'ring-2 ring-app-blue' : ''
-              }`}
-              onClick={() => handleMaterialSelect(material.id)}
-            >
-              <div className="flex">
-                <div className="h-24 w-24 bg-gray-200 flex-shrink-0">
-                  <img 
-                    src={material.thumbnail} 
-                    alt={material.title} 
-                    className="w-full h-full object-cover" 
-                  />
-                </div>
-                <div className="p-3 flex-grow">
-                  <div className="flex justify-between items-start">
-                    <h3 className="font-medium">{material.title}</h3>
-                    <span className="text-xs bg-gray-100 px-2 py-1 rounded-full">
-                      {material.type === 'guide' ? 'Guide' : 
-                       material.type === 'worksheet' ? 'Worksheet' : 'Video'}
-                    </span>
+          {filteredMaterials.length > 0 ? (
+            filteredMaterials.map((material) => (
+              <div 
+                key={material.id} 
+                className={`bg-white rounded-xl shadow-sm overflow-hidden ${
+                  selectedMaterial === material.id ? 'ring-2 ring-app-blue' : ''
+                }`}
+                onClick={() => handleMaterialSelect(material.id)}
+              >
+                <div className="flex">
+                  <div className="h-24 w-24 bg-gray-200 flex-shrink-0">
+                    <img 
+                      src={material.thumbnail} 
+                      alt={material.title} 
+                      className="w-full h-full object-cover" 
+                    />
                   </div>
-                  <p className="text-sm text-gray-600 mt-1">{material.description}</p>
-                  
-                  {material.type === 'video' && (
-                    <div className="flex items-center mt-2 text-xs text-gray-500">
-                      <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="mr-1">
-                        <circle cx="12" cy="12" r="10"/>
-                        <polygon points="10 8 16 12 10 16 10 8"/>
-                      </svg>
-                      <span>{(material as any).duration}</span>
+                  <div className="p-3 flex-grow">
+                    <div className="flex justify-between items-start">
+                      <h3 className="font-medium">{material.title}</h3>
+                      <span className="text-xs bg-gray-100 px-2 py-1 rounded-full">
+                        {material.type === 'guide' ? 'Guide' : 
+                        material.type === 'worksheet' ? 'Worksheet' : 'Video'}
+                      </span>
                     </div>
-                  )}
+                    <p className="text-sm text-gray-600 mt-1">{material.description}</p>
+                    
+                    {material.type === 'video' && (
+                      <div className="flex items-center mt-2 text-xs text-gray-500">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="mr-1">
+                          <circle cx="12" cy="12" r="10"/>
+                          <polygon points="10 8 16 12 10 16 10 8"/>
+                        </svg>
+                        <span>{(material as any).duration}</span>
+                      </div>
+                    )}
+                  </div>
                 </div>
               </div>
+            ))
+          ) : (
+            <div className="text-center py-8">
+              <p className="text-gray-500">No materials found matching your search.</p>
             </div>
-          ))}
+          )}
         </div>
         
         {selectedMaterial && (
