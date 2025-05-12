@@ -4,21 +4,41 @@ import MobileLayout from "@/components/mobile/MobileLayout";
 import MissionCard from "@/components/mobile/MissionCard";
 import { mockMissions } from "@/data/mockData";
 import { MissionStatus } from "@/types";
+import { Input } from "@/components/ui/input";
+import { Search } from "lucide-react";
 
 const MissionCenter = () => {
   const [activeTab, setActiveTab] = useState<MissionStatus | "all">("all");
+  const [searchTerm, setSearchTerm] = useState("");
   
   const filterMissions = () => {
-    if (activeTab === "all") {
+    if (activeTab === "all" && !searchTerm) {
       return mockMissions;
     }
-    return mockMissions.filter(mission => mission.status === activeTab);
+    
+    return mockMissions
+      .filter(mission => activeTab === "all" || mission.status === activeTab)
+      .filter(mission => 
+        mission.title.toLowerCase().includes(searchTerm.toLowerCase()) || 
+        mission.description.toLowerCase().includes(searchTerm.toLowerCase())
+      );
   };
   
   const filteredMissions = filterMissions();
   
   return (
     <MobileLayout title="Missions">
+      {/* Search Input */}
+      <div className="relative mb-4">
+        <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
+        <Input 
+          className="pl-9 pr-4 py-2 w-full rounded-lg"
+          placeholder="Search missions..." 
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+        />
+      </div>
+      
       {/* Tabs */}
       <div className="flex bg-white rounded-lg shadow-sm mb-4 overflow-x-auto">
         <button 
